@@ -1,6 +1,6 @@
 //const express = require('express')
 import dotenv from 'dotenv'
-const path = require('path');
+import path from 'path'
 const envFile = process.env.NODE_ENV === 'test' ? 'var.test.env' : 'var.env';
 
 dotenv.config({ path: envFile });
@@ -30,4 +30,4 @@ if( process.env.NODE_ENV != 'test'){
 	dbconnect()
 }
 
-module.exports = {app,envFile};
+export default app;

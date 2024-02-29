@@ -1,5 +1,5 @@
-const request = require('supertest');
-const {app} = require('../index'); // Replace with your server's entry point
+import request from 'supertest';
+import app from '../index' ;  // Replace with your server's entry point
 import dbconnect from "../config/db";
 import mongoose from 'mongoose'
 
@@ -44,7 +44,7 @@ describe('Test Signup->Login->CreateTo->GetTodo', () => {
 		expect(res.body.success).toEqual(true);
 	  });
 	  
-	  test('login with the created user', async()=>{
+	  test('should successfully log in with the created user credentials', async()=>{
 		
 		const res = await request(app)
 			.post('/auth/login')
