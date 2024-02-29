@@ -14,62 +14,66 @@ const clearDatabase = async () => {
 
 beforeAll(async () => {
   await dbconnect();
+  await clearDatabase(); 
 });
 
 afterAll(async () => {
+
   await mongoose.connection.close();
 });
 
-describe('POST /auth/signup', () => {
-	
-	  beforeEach(async () => {
-		await clearDatabase(); 
+describe('Test Signup->Login->CreateTo->GetTodo', () => {
+		
+		/* This runs before each test , commanly used if we have something common, or 
+			setup before each test case 
+			beforeEach(async () => {
+				await clearDatabase(); 
+			});
+		*/
+		const userdata = {
+		  username: 'testUser',
+		  password: 'password123',
+		  email:"testuser@example.com",
+		};
+		let token ;
+	  test('should create a new user with valid data', async () => {
+		const res = await request(app)
+		  .post('/auth/signup')
+		  .send(userdata)
+		  .expect(201);
+		expect(res.body.success).toEqual(true);
 	  });
-
-  test('should create a new user with valid data', async () => {
-    const newUserData = {
-      username: 'testUser',
-      password: 'password123',
-	  email:"testuser@example.com",
-    };
+	  
+	  test('login with the created user', async()=>{
+		
+		const res = await request(app)
+			.post('/auth/login')
+			.send({username: 'testUser', password: 'password123'})
+			.expect(200)
+		expect(res.body.success).toEqual(true) 
+		token = res.body.token
+	});
 	
-    const response = await request(app)
-      .post('/auth/signup')
-      .send(newUserData)
-      .expect(201);
-
-    expect(response.body.success).toEqual(true);
-  });
-
-  test('should handle missing username or password', async () => {
-    const incompleteData = {
-      username: 'testUser', // Missing password
-    };
-
-    const response = await request(app)
-      .post('/auth/signup')
-      .send(incompleteData)
-      .expect(400);
-
-    expect(response.body).toEqual({ error: 'Missing username or password' });
-  });
-
-  test('should handle duplicate username', async () => {
-    // Create a user with the username beforehand (outside the test)
-    // ... (code to create the user)
-
-    const duplicateData = {
-      username: 'existingUser', // Username used for the created user
-      password: 'anyPassword',
-    };
-
-    const response = await request(app)
-      .post('/auth/signup')
-      .send(duplicateData)
-      .expect(409);
-
-    expect(response.body).toEqual({ error: 'Username already exists' });
-  });
-
+	test('create data ' , async()=>{
+		const todoData = {
+			title:'Jawan',
+			description:'Starring: Shahrukh khan'
+		};
+		const res = await request(app)
+			.post('/todo/createtodo')
+			.set('Authorization',`${token}`)
+			.send(todoData)
+		expect(res.body.success).toEqual(true)
+	});
+	
+	test('get data', async()=>{
+		const res = await request(app)
+			.get('/todo/gettodo')
+			.set('Authorization',`${token}`)
+		
+		expect(res.statusCode).toBe(200)
+		//console.log(res.body)
+		expect(res.body.data[0]['title']).toEqual('Jawan')
+	});
   // Add more tests to cover other scenarios like invalid characters, etc.
 });

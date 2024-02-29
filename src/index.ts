@@ -18,7 +18,7 @@ app.use(cors())
 app.use(bodyParser.json());
 
 app.use('/auth',authRoutes);
-app.use('/todos',todoRoutes);
+app.use('/todo',todoRoutes);
 app.all('*', (req: Request, res: Response) => {
   res.status(404).json({
     success: false,
