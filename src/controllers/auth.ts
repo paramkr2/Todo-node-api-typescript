@@ -14,9 +14,9 @@ export const SignUp = async (req, res) => {
   try {
     const existingUser = await UserModel.findOne({ username });
     if (existingUser) {
-      return res.status(400).json({ error: 'Username is already taken' });
+      return res.status(400).json({ success:false,error: 'Username is already taken' });
     }
-
+	console.log('InSignup',password);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await UserModel.create({ username, password: hashedPassword, email });

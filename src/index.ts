@@ -1,8 +1,9 @@
 //const express = require('express')
-//const dotenv = require('dotenv') 
-import dotenv from "dotenv" ;
-dotenv.config({ path:  'var.env' });
+import dotenv from 'dotenv'
+const path = require('path');
+const envFile = process.env.NODE_ENV === 'test' ? 'var.test.env' : 'var.env';
 
+dotenv.config({ path: envFile });
 import express , {Express,Request,Response} from "express";
 
 import todoRoutes from './routes/todoRoutes';
@@ -11,9 +12,8 @@ import bodyParser from 'body-parser'
 import cors from 'cors';
 import dbconnect from "./config/db";
 
-
 const app : Express = express();
-const port = 8000;
+
 app.use(cors())
 app.use(bodyParser.json());
 
@@ -26,11 +26,8 @@ app.all('*', (req: Request, res: Response) => {
   });
 });
 
+if( process.env.NODE_ENV != 'test'){
+	dbconnect()
+}
 
-
-
-dbconnect()
-
-app.listen( port , ()=>{
-	console.log(`[server]:Server is running at port ${port}`)
-});
+module.exports = {app,envFile};

@@ -10,7 +10,9 @@ export const verificationMiddleware = async (req, res, next) => {
     }
     // if verification fails, it will throw an error
     const payload = jwt.verify(token, publicKey,{ algorithm: 'RS256' });
-    req.user = payload.username;
+	console.log('verification middleware payload',payload);
+    res.locals.user = payload.username;
+	res.locals.userid=payload.userId ;
     next(); // Call next to pass control to the next middleware or route handler
   } catch (error) {
     console.log('Verification middleware', error);

@@ -1,3 +1,4 @@
 node_modules
 src/key/*
 var.env
+dist 

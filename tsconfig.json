@@ -9,5 +9,12 @@
      "skipLibCheck": true   ,
 	"outDir":"./dist",
 	 
-  }
+	  "paths": {
+		  "@app/*": ["src/*"]
+		}
+  },
+  "include": [
+    "src",
+    "test"
+  ]
 }
