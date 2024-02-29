@@ -1,7 +1,7 @@
-#TodoAPI | Typescript + Express + Mongodb + Jest
+## TodoAPI | Typescript + Express + Mongodb + Jest
 
-Install Dependencies: 'npm i' 
+**Install Dependencies:** 'npm i' 
 
-To start server: `npm run dev'
+**Start server:** `npm run dev`
 
-To run test: 'npm run test'
+**Run test:** `npm run test`
